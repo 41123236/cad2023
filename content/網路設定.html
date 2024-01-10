@@ -143,6 +143,161 @@ img.add_border {
           
         </header>
     <div id="tipue_search_content">W15 << <a href='W15.html'>Previous</a> <br /><h1>網路設定</h1>
+<div id="tipue_search_content">
+<p>由於電腦輔助設計室某部分套件, 在 IPv4 網路環境下會被防毒軟體偵測到封包異常而封閉網路, 因此以下將 IPv4 網路關閉, 僅使用 IPv6, 並透過雙網路協定支援的代理主機設定, 以便與僅支援 IPv4 的網路主機連線.</p>
+<p>利用隨身碟上的批次檔案進行電腦輔助設計室網路環境設定 (<a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/yen_nfu_edu_tw/Ed9GeWN75kJDmWsdXEeEDukBetqQ1g_3tA_PoIY-dHXDgw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0RpcmVjdCJ9fQ&amp;e=e6bNYA">設定影片</a>):</p>
+<p>1_cadlab_network_setup.bat</p>
+<div>
+<div class="syntaxhighlighter js" id="highlighter_671160">
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">echo </code><code class="js string">"disable ipv4 and setup proxy for ipv6"</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">SET CurrentDir=%~dp0</code></div>
+<div class="line number3 index2 alt2"><code class="js plain">%windir%\system32\reg.exe import %CurrentDir%1_2023_cadlab_network_setup.reg</code></div>
+<div class="line number4 index3 alt1"><code class="js plain">powershell -executionpolicy bypass -File %CurrentDir%1_disable_ipv4.ps1</code></div>
+<div class="line number5 index4 alt2"><code class="js plain">exit</code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>1_2023_cadlab_network_setup.reg</p>
+<p>關閉自動搜尋代理主機, 自行設定代理主機外, 對近端與 NAT 內部 IPv4 網址不使用 proxy server, 若 proxy server 採 domain name 設定則當 IPv4 網路協定啟動時, 亦可透過代理主機連線.</p>
+<div>
+<div class="syntaxhighlighter js" id="highlighter_180818">
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div>
+<div class="line number10 index9 alt1">10</div>
+<div class="line number11 index10 alt2">11</div>
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js plain">Windows Registry Editor Version 5.00</code></div>
+<div class="line number2 index1 alt1"> </div>
+<div class="line number3 index2 alt2"><code class="js spaces"> </code><code class="js plain">[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings]</code></div>
+<div class="line number4 index3 alt1"><code class="js spaces"> </code><code class="js plain">; disable AutoDetect</code></div>
+<div class="line number5 index4 alt2"><code class="js string">"AutoDetect"</code><code class="js plain">=dword:00000000</code></div>
+<div class="line number6 index5 alt1"><code class="js string">"MigrateProxy"</code><code class="js plain">=dword:00000001</code></div>
+<div class="line number7 index6 alt2"><code class="js plain">; enable Proxy</code></div>
+<div class="line number8 index7 alt1"><code class="js string">"ProxyEnable"</code><code class="js plain">=dword:00000001 </code></div>
+<div class="line number9 index8 alt2"><code class="js string">"ProxyHttp1.1"</code><code class="js plain">=dword:00000000 </code></div>
+<div class="line number10 index9 alt1"><code class="js string">"ProxyServer"</code><code class="js plain">=</code><code class="js string">"http://p4.cycu.org:3128"</code></div>
+<div class="line number11 index10 alt2"><code class="js string">"ProxyOverride"</code><code class="js plain">=</code><code class="js string">"localhost;192.168.1.0/24;&lt;local&gt;"</code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>1_disable_ipv4.ps1</p>
+<p>僅啟動 IPv6 網路協定, 且將 dns server 指向 hinet.</p>
+<div>
+<div class="syntaxhighlighter js" id="highlighter_590423">
+<table border="0" cellpadding="0" cellspacing="0">
+<tbody>
+<tr>
+<td class="gutter">
+<div class="line number1 index0 alt2">1</div>
+<div class="line number2 index1 alt1">2</div>
+<div class="line number3 index2 alt2">3</div>
+<div class="line number4 index3 alt1">4</div>
+<div class="line number5 index4 alt2">5</div>
+<div class="line number6 index5 alt1">6</div>
+<div class="line number7 index6 alt2">7</div>
+<div class="line number8 index7 alt1">8</div>
+<div class="line number9 index8 alt2">9</div>
+<div class="line number10 index9 alt1">10</div>
+<div class="line number11 index10 alt2">11</div>
+<div class="line number12 index11 alt1">12</div>
+<div class="line number13 index12 alt2">13</div>
+<div class="line number14 index13 alt1">14</div>
+<div class="line number15 index14 alt2">15</div>
+<div class="line number16 index15 alt1">16</div>
+<div class="line number17 index16 alt2">17</div>
+<div class="line number18 index17 alt1">18</div>
+<div class="line number19 index18 alt2">19</div>
+<div class="line number20 index19 alt1">20</div>
+<div class="line number21 index20 alt2">21</div>
+<div class="line number22 index21 alt1">22</div>
+<div class="line number23 index22 alt2">23</div>
+<div class="line number24 index23 alt1">24</div>
+<div class="line number25 index24 alt2">25</div>
+<div class="line number26 index25 alt1">26</div>
+<div class="line number27 index26 alt2">27</div>
+<div class="line number28 index27 alt1">28</div>
+</td>
+<td class="code">
+<div class="container">
+<div class="line number1 index0 alt2"><code class="js preprocessor"># 關閉 IPv4 網路</code></div>
+<div class="line number2 index1 alt1"><code class="js plain">Disable-NetAdapterBinding -Name </code><code class="js string">"*"</code> <code class="js plain">-ComponentID ms_tcpip</code></div>
+<div class="line number3 index2 alt2"><code class="js spaces">  </code> </div>
+<div class="line number4 index3 alt1"><code class="js preprocessor"># 啟用 IPv6 網路</code></div>
+<div class="line number5 index4 alt2"><code class="js plain">Enable-NetAdapterBinding -Name </code><code class="js string">"*"</code> <code class="js plain">-ComponentID ms_tcpip6</code></div>
+<div class="line number6 index5 alt1"><code class="js spaces">  </code> </div>
+<div class="line number7 index6 alt2"><code class="js preprocessor"># 設置 IPv6 網路中的兩個 DNS 伺服器 (hinet)</code></div>
+<div class="line number8 index7 alt1"><code class="js plain">$dnsServers = </code><code class="js string">"2001:b000:168::1"</code><code class="js plain">, </code><code class="js string">"2001:b000:168::2"</code></div>
+<div class="line number9 index8 alt2"><code class="js plain">Set-DnsClientServerAddress -InterfaceAlias </code><code class="js string">"*"</code> <code class="js plain">-ServerAddresses $dnsServers</code></div>
+<div class="line number10 index9 alt1"> </div>
+<div class="line number11 index10 alt2"> </div>
+<div class="line number12 index11 alt1"><code class="js preprocessor"># 設定 IPv6 固定位址 (fixed address), 子網路首碼長度 (subnet prefix) 與網路預設閘道 (gateway) 等三個變數</code></div>
+<div class="line number13 index12 alt2"><code class="js plain">$ipv6Address = </code><code class="js string">"2001:288:6004:17:請使用個人所分配到的 IPv6 位址"</code></div>
+<div class="line number14 index13 alt1"><code class="js plain">$subnetPrefixLength = 64</code></div>
+<div class="line number15 index14 alt2"><code class="js plain">$gateway = </code><code class="js string">"2001:288:6004:17::254"</code></div>
+<div class="line number16 index15 alt1"><code class="js spaces"> </code> </div>
+<div class="line number17 index16 alt2"><code class="js preprocessor"># 參考 https://serverfault.com/questions/427234/getting-network-interface-device-name-in-powershell</code></div>
+<div class="line number18 index17 alt1"><code class="js plain">$query = </code><code class="js string">"SELECT * FROM Win32_NetworkAdapter WHERE Manufacturer != 'Microsoft' AND NOT PNPDeviceID LIKE 'ROOT\\%'"</code></div>
+<div class="line number19 index18 alt2"><code class="js plain">$interfaces = Get-WmiObject -Query $query | Sort index</code></div>
+<div class="line number20 index19 alt1"><code class="js plain">$interfaces | ForEach{</code></div>
+<div class="line number21 index20 alt2"><code class="js spaces">    </code><code class="js plain">$friendlyname = $_ | ForEach-Object { $_.NetConnectionID }</code></div>
+<div class="line number22 index21 alt1"><code class="js spaces">    </code><code class="js plain">New-NetIPAddress -AddressFamily </code><code class="js string">"IPv6"</code> <code class="js plain">-InterfaceAlias $friendlyname -IPAddress $ipv6Address -PrefixLength $subnetPrefixLength -DefaultGateway $gateway</code></div>
+<div class="line number23 index22 alt2"><code class="js plain">}</code></div>
+<div class="line number24 index23 alt1"> </div>
+<div class="line number25 index24 alt2"><code class="js spaces"> </code> </div>
+<div class="line number26 index25 alt1"><code class="js preprocessor"># 列出所使用的 IPv6 網路通訊協定內容</code></div>
+<div class="line number27 index26 alt2"><code class="js plain">Write-Host </code><code class="js string">"IPv6 Address: $ipv6Address/$subnetPrefixLength"</code></div>
+<div class="line number28 index27 alt1"><code class="js plain">Write-Host </code><code class="js string">"IPv6 Gateway: $gateway"</code></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>下載<span> </span><a href="https://nfuedu-my.sharepoint.com/:u:/g/personal/yen_nfu_edu_tw/EU-PdLegiEFAoTlO_yKCXTcB6iUdp0beiWj-9_DIWMoSgQ?e=qCEtYU">cad2023_network_setup.7z</a><span> </span>(需要下載密碼), 必須以管理者身分執行批次檔案, 因為要藉此身分關閉 IPv4 網路協定.</p>
+<p>下載<span> </span><a href="https://nfuedu-my.sharepoint.com/:u:/g/personal/yen_nfu_edu_tw/Eck0KdLe1uZEk_LJ2tkEf4ABZyW32cmq5WZVl52Fww9C2A?e=i5Dm3t">2023_fall_w7_cadlab_network_setup.7z</a> <span>(需要下載密碼), 必須先放入個人所分配到的 IPv6 位址後, 以管理者身分執行批次檔案, 就能直接完成電腦輔助設計室中電腦的網路連線設定.</span></p>
+<p><span>各學員所分配的固定 IPv6 位址如下:</span></p>
+<p>2a 學員展示用 IPv6 位址: 2001:288:6004:17:2023:cada::<a href="https://mde.tw/cadnote/content/Brython.html?src=https://gist.githubusercontent.com/mdecycu/9215c7c160119721ded887018cda8f4e/raw/afc0e4d2267199743ac44bc7aeb0c4b195a30abb/generate_cad2023_2a_site_repo.py">班級名單序號</a></p>
+<p><span>2b 學員展示用 IPv6 位址: 2001:288:6004:17:2023:cadb::</span><a href="https://mde.tw/cadnote/content/Brython.html?src=https://gist.githubusercontent.com/mdecycu/9215c7c160119721ded887018cda8f4e/raw/afc0e4d2267199743ac44bc7aeb0c4b195a30abb/generate_cad2023_2b_site_repo.py">班級名單序號</a></p>
+<br/>w15 &lt;&lt;<span> </span><a href="https://mde.tw/cadnote/content/w15.html">Previous</a><span> </span><a href="https://mde.tw/cadnote/content/exam.html">Next</a><span> </span>&gt;&gt; exam</div>
+<div class="container">
+<div class="row pt-3 mx-auto">
+<p>Copyright ©2024 All rights reserved | This template is made with<span> </span><i aria-hidden="true" class="icon-heart"></i><span> </span>by<span> </span><a href="https://colorlib.com/" target="_blank">Colorlib</a></p>
+</div>
+</div>
 </div>
 </div>
 </div><br />W15 << <a href='W15.html'>Previous</a> </div>
